@@ -14,6 +14,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(Qt5Core)
 
 add_executable(test_elektronNipk
-  main.cpp eliimage.cpp eliimage.h
+  main.cpp
+  eliimage.h
+  eliimagehandler.cpp eliimagehandler.h
+  eliimageprocessing.cpp eliimageprocessing.h
 )
 target_link_libraries(test_elektronNipk Qt5::Core)
