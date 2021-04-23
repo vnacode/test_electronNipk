@@ -2,10 +2,6 @@
 #define ELIIMAGE_H
 #include <QtCore>
 
-
-
-
-
 struct EliImageHeader
 {
 	char signature[4];

@@ -4,8 +4,6 @@
 #include "eliimagehandler.h"
 #include <QString>
 
-
-
 class EliImageProcessing
 {
 public:

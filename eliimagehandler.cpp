@@ -8,11 +8,6 @@
 
 const int dataOffset = 512;
 
-EliImageHandler::EliImageHandler()
-{
-
-}
-
 bool EliImageHandler::readHeader(const QString &fileName, EliImageHeader &handler)
 {
 	QFile file(fileName);
@@ -61,15 +56,6 @@ bool EliImageHandler::readHeader(const QString &fileName, EliImageHeader &handle
 	handler.bit_count = bit_count;
 	handler.line_length = line_length;
 
-	//	ds.skipRawData(offset - header_length);
-	//	quint16 imgData[image_width][image_height];
-	//	for (int i = 0 ; i < image_width; i++)
-	//	{
-	//		for (int j = 0; j < image_height; j++)
-	//		{
-	//			ds >> imgData[i][j];
-	//		}
-	//	}
 	return true;
 }
 
@@ -128,7 +114,6 @@ bool EliImageHandler::write16bitEli(const EliImage<quint16> &img, QString fileNa
 	{
 		for (int x = 0; x < img.getHeader().image_height; x++)
 		{
-			//qDebug() << y << x;
 			ds << img.data()[y][x];
 		}
 	}
