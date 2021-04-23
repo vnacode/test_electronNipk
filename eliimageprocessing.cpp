@@ -53,7 +53,7 @@ void divisionThreadFunc(argthreadData<quint16> *array)
 bool EliImageProcessing::divisionPxels(const QString &file1, const QString file2, const QString &output)
 {
 	EliImageHeader header1, header2;
-	if (!(EliImageHandler::readHeader(file1,header1) && EliImageHandler::readHeader(file2,header2)))
+	if (!(m_handler.readHeader(file1,header1) && m_handler.readHeader(file2,header2)))
 	{
 		return false;
 	}
@@ -69,8 +69,8 @@ bool EliImageProcessing::divisionPxels(const QString &file1, const QString file2
 	}
 
 	EliImage<quint16> img1(header1), img2(header2);
-	EliImageHandler::read16bitEli(file1, img1);
-	EliImageHandler::read16bitEli(file2, img2);
+	m_handler.read16bitEli(file1, img1);
+	m_handler.read16bitEli(file2, img2);
 	EliImage<quint16> resultImg(header1);
 	auto width = img1.header().image_width;
 	auto height= img1.header().image_height;
@@ -85,14 +85,14 @@ bool EliImageProcessing::divisionPxels(const QString &file1, const QString file2
 		}
 	}
 	resultImg.setData(resultData);
-	return EliImageHandler::write16bitEli(resultImg, output);
+	return m_handler.write16bitEli(resultImg, output);
 }
 
 
 bool EliImageProcessing::divisionPxelsMultiThread(const QString &file1, const QString file2, const QString &output)
 {
 	EliImageHeader header1, header2;
-	if (!(EliImageHandler::readHeader(file1,header1) && EliImageHandler::readHeader(file2,header2)))
+	if (!(m_handler.readHeader(file1,header1) && m_handler.readHeader(file2,header2)))
 	{
 		return false;
 	}
@@ -108,8 +108,8 @@ bool EliImageProcessing::divisionPxelsMultiThread(const QString &file1, const QS
 	}
 
 	EliImage<quint16> img1(header1), img2(header2);
-	EliImageHandler::read16bitEli(file1, img1);
-	EliImageHandler::read16bitEli(file2, img2);
+	m_handler.read16bitEli(file1, img1);
+	m_handler.read16bitEli(file2, img2);
 	EliImage<quint16> resultImg(header1);
 	auto width = img1.header().image_width;
 	auto block = width / threadsCount;
@@ -143,6 +143,6 @@ bool EliImageProcessing::divisionPxelsMultiThread(const QString &file1, const QS
 		image_proc_thread_wait(th[i]);
 	}
 	resultImg.setData(resultData);
-	return EliImageHandler::write16bitEli(resultImg, output);
+	return m_handler.write16bitEli(resultImg, output);
 }
 

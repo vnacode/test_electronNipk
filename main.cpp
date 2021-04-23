@@ -41,13 +41,15 @@ int main(int argc, char *argv[])
 	{
 		std::cout << "Введите имя файлов изображений!!" << std::endl;;
 	}
+	EliImageHandler handler;
+	EliImageProcessing eliproc(handler);
 	{
 		Timer t;
-		EliImageProcessing::divisionPxels(argv[1], argv[2], argv[3]);
+		eliproc.divisionPxels(argv[1], argv[2], argv[3]);
 	}
 	{
 		Timer t;
-		EliImageProcessing::divisionPxelsMultiThread(argv[1], argv[2], argv[3]);
+		eliproc.EliImageProcessing::divisionPxelsMultiThread(argv[1], argv[2], argv[3]);
 	}
 	//	handler.readHeader(argv[1], header);
 	return 0;

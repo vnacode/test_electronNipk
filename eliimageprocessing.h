@@ -7,11 +7,12 @@
 class EliImageProcessing
 {
 public:
-	EliImageProcessing() {};
-	static bool divisionPxels(const QString &file1, const QString file2, const QString &output);
-	static bool divisionPxelsMultiThread(const QString &file1, const QString file2, const QString &output);
-	static int getNumberOfThreads(const int imageWidth, const int imageHeight);
+	EliImageProcessing(const EliImageHandler &handler) { m_handler = handler; };
+	bool divisionPxels(const QString &file1, const QString file2, const QString &output);
+	bool divisionPxelsMultiThread(const QString &file1, const QString file2, const QString &output);
+	int getNumberOfThreads(const int imageWidth, const int imageHeight);
 private:
+	EliImageHandler m_handler;
 };
 
 #endif // ELIIMAGEPROCESSING_H
