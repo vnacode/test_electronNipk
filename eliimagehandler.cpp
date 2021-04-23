@@ -128,6 +128,7 @@ bool EliImageHandler::write16bitEli(const EliImage<quint16> &img, QString fileNa
 	{
 		for (int x = 0; x < img.getHeader().image_height; x++)
 		{
+			//qDebug() << y << x;
 			ds << img.data()[y][x];
 		}
 	}

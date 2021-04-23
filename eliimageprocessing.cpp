@@ -38,7 +38,15 @@ struct argthreadData
 template <typename T>
 void divisionThreadFunc(argthreadData<quint16> *array)
 {
-
+	for (int y = array->startPos; y < array->startPos + array->blockSize; y++)
+	{
+//		delete array->resultData[y];
+		array->resultData[y] = new T[array->width];
+		for (int x = 0; x < array->width; x++)
+		{
+			array->resultData[y][x] = array->firstData[y][x] / array->secondData[y][x];
+		}
+	}
 }
 
 
@@ -105,12 +113,11 @@ bool EliImageProcessing::divisionPxelsMultiThread(const QString &file1, const QS
 	EliImage<quint16> resultImg(header1);
 	auto width = img1.header().image_width;
 	auto block = width / threadsCount;
-
 	image_proc_thread_t th[threadsCount];
 	argthreadData<quint16> ag[threadsCount];
 	quint16 **resultData = new quint16*[width];
 
-	for (unsigned i = 0; i < threadsCount; i++)
+	for (unsigned i = 0; i < threadsCount - 1; i++)
 	{
 		ag[i].width = width;
 		ag[i].startPos = (i * block);
@@ -120,6 +127,16 @@ bool EliImageProcessing::divisionPxelsMultiThread(const QString &file1, const QS
 		ag[i].resultData = resultData;
 		image_proc_thread_create<quint16, argthreadData>(&th[i], divisionThreadFunc<quint16>, &ag[i]);
 	}
+	auto remnant = width % threadsCount;
+	auto lastThread = threadsCount - 1;
+	ag[lastThread].width = width;
+	ag[lastThread].startPos = (lastThread * block);
+	ag[lastThread].blockSize = block + remnant;
+	ag[lastThread].firstData = img1.data();
+	ag[lastThread].secondData = img2.data();
+	ag[lastThread].resultData = resultData;
+	image_proc_thread_create<quint16, argthreadData>(&th[lastThread], divisionThreadFunc<quint16>, &ag[lastThread]);
+
 
 	for (unsigned i = 0; i < threadsCount; i++)
 	{
