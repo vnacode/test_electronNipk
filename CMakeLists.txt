@@ -4,10 +4,6 @@ project(test_elektronNipk LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
-
 SET(PLATFORM_SPECIFIC_LIBS "-lpthread")
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -pthread")
 
@@ -20,4 +16,3 @@ add_executable(test_elektronNipk
   eliimageprocessing.cpp eliimageprocessing.h
 )
 
-target_link_libraries(test_elektronNipk Qt5::Core)

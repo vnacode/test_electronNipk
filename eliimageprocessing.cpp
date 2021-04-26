@@ -1,7 +1,9 @@
 #include "eliimageprocessing.h"
+#include "iostream"
 #include "thread"
-#include <QDebug>
 #include "type_traits"
+#include "future"
+#include "functional"
 
 unsigned int threadsCount = std::thread::hardware_concurrency();
 
@@ -49,7 +51,7 @@ void EliImageProcessing::divisionThreadFunc(argthreadData<T> *array)
 }
 
 
-bool EliImageProcessing::divisionPxels(const QString &file1, const QString file2, const QString &output)
+bool EliImageProcessing::divisionPxels(const std::string &file1, const std::string &file2, const std::string &output)
 {
 	EliImageHeader header1, header2;
 	if (!(m_handler.readHeader(file1,header1) && m_handler.readHeader(file2,header2)))
@@ -58,12 +60,12 @@ bool EliImageProcessing::divisionPxels(const QString &file1, const QString file2
 	}
 	if (header1.bit_count != header2.bit_count)
 	{
-		qWarning() << "Разные форматы изображений";
+		std::cout << "Разные форматы изображений";
 		return false;
 	}
 	if (header1.size() != header2.size())
 	{
-		qWarning() << "Разные размеры изображений";
+		std::cout << "Разные размеры изображений";
 		return false;
 	}
 
@@ -87,7 +89,7 @@ bool EliImageProcessing::divisionPxels(const QString &file1, const QString file2
 }
 
 
-bool EliImageProcessing::divisionPxelsMultiThread(const QString &file1, const QString file2, const QString &output)
+bool EliImageProcessing::divisionPxelsMultiThread(const std::string &file1, const std::string &file2, const std::string &output)
 {
 	EliImageHeader header1, header2;
 	if (!(m_handler.readHeader(file1,header1) && m_handler.readHeader(file2,header2)))
@@ -96,12 +98,12 @@ bool EliImageProcessing::divisionPxelsMultiThread(const QString &file1, const QS
 	}
 	if (header1.bit_count != header2.bit_count)
 	{
-		qWarning() << "Разные форматы изображений";
+		std::cout << "Разные форматы изображений";
 		return false;
 	}
 	if (header1.size() != header2.size())
 	{
-		qWarning() << "Разные размеры изображений";
+		std::cout << "Разные размеры изображений";
 		return false;
 	}
 
@@ -123,17 +125,14 @@ bool EliImageProcessing::divisionPxelsMultiThread(const QString &file1, const QS
 		ag[i].firstData = img1.data();
 		ag[i].secondData = img2.data();
 		ag[i].resultData = resultData;
-		image_proc_thread_create<uint16_t, argthreadData>(&th[i], threadFunction, &ag[i]);
 	}
 	auto remnant = width % threadsCount;
-	if (remnant > 0)
-	{
-		auto lastThread = threadsCount - 1;
-		ag[lastThread].blockSize = block + remnant;
-	}
+	auto lastThread = threadsCount - 1;
+	ag[lastThread].blockSize = block + remnant;
 
 	for (unsigned i = 0; i < threadsCount; i++)
 	{
+		image_proc_thread_create<uint16_t, argthreadData>(&th[i], threadFunction, &ag[i]);
 		image_proc_thread_wait(th[i]);
 	}
 	resultImg.setData(resultData);

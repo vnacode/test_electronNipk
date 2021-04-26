@@ -1,15 +1,15 @@
 #ifndef ELIIMAGEHANDLER_H
 #define ELIIMAGEHANDLER_H
-#include <QString>
 #include "eliimage.h"
+#include "string"
 
 class EliImageHandler
 {
 public:
 	EliImageHandler(){};
-	bool readHeader(const QString &fileName, EliImageHeader &handler);
-	bool read16bitEli(const QString &fileName, EliImage<quint16> &output);
-	bool write16bitEli(const EliImage<quint16> &img, QString fileName);
+	bool readHeader(const std::string &fileName, EliImageHeader &handler);
+	bool read16bitEli(const std::string &fileName, EliImage<uint16_t> &output);
+	bool write16bitEli(const EliImage<uint16_t> &img, const std::string &fileName);
 };
 
 #endif // ELIIMAGEHANDLER_H

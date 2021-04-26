@@ -1,6 +1,7 @@
 #include "iostream"
-#include <QCoreApplication>
+#include "chrono"
 #include "eliimageprocessing.h"
+
 
 // class for perfomance measurement
 class Timer
@@ -18,7 +19,7 @@ public:
 
 	~Timer ()
 	{
-		qDebug() << "Time elapsed: " << elapsed();
+		std::cout << "Time elapsed: " << elapsed() << std::endl;
 	}
 
 	void reset()
@@ -36,7 +37,6 @@ public:
 
 int main(int argc, char *argv[])
 {
-	QCoreApplication a(argc, argv);
 	if (argc < 2)
 	{
 		std::cout << "Введите имя файлов изображений!!" << std::endl;;
@@ -51,6 +51,5 @@ int main(int argc, char *argv[])
 		Timer t;
 		eliproc.EliImageProcessing::divisionPxelsMultiThread(argv[1], argv[2], argv[3]);
 	}
-	//	handler.readHeader(argv[1], header);
 	return 0;
 }

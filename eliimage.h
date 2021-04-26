@@ -1,17 +1,17 @@
 #ifndef ELIIMAGE_H
-#define ELIIMAGE_H
-#include <QtCore>
+#pragma once
+#include "inttypes.h"
 
 struct EliImageHeader
 {
 	char signature[4];
-	qint32 header_length = 0;;
-	qint32 offset = 0;
-	qint32 reserved = 0;
-	qint32 image_width = 0;			// Ширина изображения пикселах
-	qint32 image_height = 0;		// Высота изображения в пикселах
-	qint32 bit_count = 0;			// Количество бит на пиксел
-	qint32 line_length = 0;			// Длина одной строки изображения в байтах
+	int32_t header_length = 0;;
+	int32_t offset = 0;
+	int32_t reserved = 0;
+	int32_t image_width = 0;			// Ширина изображения пикселах
+	int32_t image_height = 0;		// Высота изображения в пикселах
+	int32_t bit_count = 0;			// Количество бит на пиксел
+	int32_t line_length = 0;			// Длина одной строки изображения в байтах
 
 	auto size() const { return  image_width * image_height; }
 	bool isEmpty() {
@@ -26,11 +26,11 @@ class EliImage
 public:
 	EliImage() :
 		m_header(),
-		m_data(Q_NULLPTR) {}
+		m_data(nullptr) {}
 
 	EliImage(const EliImageHeader &header)
 		 : m_header(header),
-		   m_data(Q_NULLPTR) {}
+		   m_data(nullptr) {}
 
 	T **data() const { return m_data;};
 	void setData(T** data) { m_data = data; }
