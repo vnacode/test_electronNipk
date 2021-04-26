@@ -4,6 +4,10 @@
 #include "eliimagehandler.h"
 #include <QString>
 
+template<typename T>
+struct argthreadData;
+
+
 class EliImageProcessing
 {
 public:
@@ -12,6 +16,8 @@ public:
 	bool divisionPxelsMultiThread(const QString &file1, const QString file2, const QString &output);
 	int getNumberOfThreads(const int imageWidth, const int imageHeight);
 private:
+	template<typename T>
+	void divisionThreadFunc(struct argthreadData<T> *array);
 	EliImageHandler m_handler;
 };
 
