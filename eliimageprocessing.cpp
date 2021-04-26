@@ -45,7 +45,10 @@ void EliImageProcessing::divisionThreadFunc(argthreadData<T> *array)
 		array->resultData[y] = new T[array->width];
 		for (int x = 0; x < array->width; x++)
 		{
-			array->resultData[y][x] = array->firstData[y][x] / array->secondData[y][x];
+			if (array->secondData[y][x] == 0)
+				array->resultData[y][x] = std::numeric_limits<T>::max();
+			else
+				array->resultData[y][x] = array->firstData[y][x] / array->secondData[y][x];
 		}
 	}
 }
@@ -81,6 +84,9 @@ bool EliImageProcessing::divisionPxels(const std::string &file1, const std::stri
 		resultData[y] = new uint16_t[height];
 		for (int x = 0; x < height; x++)
 		{
+			if (img2.data()[y][x] == 0)
+				resultData[y][x] = std::numeric_limits<uint16_t>::max();
+			else
 			resultData[y][x] = img1.data()[y][x] / img2.data()[y][x];
 		}
 	}

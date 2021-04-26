@@ -5,13 +5,13 @@
 struct EliImageHeader
 {
 	char signature[4];
-	int32_t header_length = 0;;
-	int32_t offset = 0;
-	int32_t reserved = 0;
-	int32_t image_width = 0;			// Ширина изображения пикселах
-	int32_t image_height = 0;		// Высота изображения в пикселах
-	int32_t bit_count = 0;			// Количество бит на пиксел
-	int32_t line_length = 0;			// Длина одной строки изображения в байтах
+	uint32_t header_length = 0;;
+	uint32_t offset = 0;
+	uint32_t reserved = 0;
+	uint32_t image_width = 0;			// Ширина изображения пикселах
+	uint32_t image_height = 0;		// Высота изображения в пикселах
+	uint32_t bit_count = 0;			// Количество бит на пиксел
+	uint32_t line_length = 0;			// Длина одной строки изображения в байтах
 
 	auto size() const { return  image_width * image_height; }
 	bool isEmpty() {
