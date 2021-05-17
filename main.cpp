@@ -1,53 +1,49 @@
-#include "iostream"
-#include "chrono"
-#include "eliimageprocessing.h"
+#include <iostream>
 
-
-// class for perfomance measurement
-class Timer
-{
-private:
-	using clock_t = std::chrono::high_resolution_clock;
-	using second_t = std::chrono::duration<double, std::ratio<1>>;
-
-	std::chrono::time_point<clock_t> m_beg;
-
-public:
-	Timer() : m_beg(clock_t::now())
-	{
-	}
-
-	~Timer ()
-	{
-		std::cout << "Time elapsed: " << elapsed() << std::endl;
-	}
-
-	void reset()
-	{
-		m_beg = clock_t::now();
-	}
-
-	double elapsed() const
-	{
-		return std::chrono::duration_cast<second_t>(clock_t::now() - m_beg).count();
-	}
-};
+#include "TestTimer.h"
+#include "imagemath.h"
 
 int main(int argc, char *argv[])
 {
 	if (argc < 2)
 	{
-		std::cout << "Введите имя файлов изображений!!" << std::endl;;
+		std::cout << "Enter file path!" << std::endl;
+		return 1;
 	}
-	EliImageHandler handler;
-	EliImageProcessing eliproc(handler);
+	std::cout.precision(5);
+
+	char* inputFile = argv[1];
+	char* outputFile = "out.ELI";
+	std::cout << "inputFile <-- " << inputFile << std::endl;
+
+	EliImage::Image input = EliImage::create(argv[1]);
+	EliImage::Image output(input);
+	double sigma = Math::FindSigma(input);
+	std::cout << "sigma " << sigma << std::endl;
+
+	Math::Filter kernel = Math::getGaussianFilter(3, 3, 1, sigma);
+	/// filter ///
+	std::cout << std::endl;
+	std::cout << "---------------------------" << std::endl;
+	for (int i = 0; i < kernel.size.h; ++i)
+	{
+		for (int j = 0; j < kernel.size.w; ++j)
+		{
+			std::cout << "|" << kernel.mat[i][j] << "|";
+		}
+		std::cout << std::endl;
+		std::cout << "---------------------------" << std::endl;
+	}
+	/// filter ///
 	{
 		Timer t;
-		eliproc.divisionPxels(argv[1], argv[2], argv[3]);
+		Math::applyFilter(input, output, kernel);
 	}
 	{
 		Timer t;
-		eliproc.EliImageProcessing::divisionPxelsMultiThread(argv[1], argv[2], argv[3]);
+		Math::applyFilterAsync(input, output, kernel);
 	}
+
+	std::cout << "outputFile --> " << outputFile << std::endl;
 	return 0;
 }
